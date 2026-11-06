@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commerce BI Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            overflow-y: auto;
+            background: #172554;
+            padding: 25px 15px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 12px;
+            margin-bottom: 6px;
+            color: #e2e8f0;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 28px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 11px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000d;
+            min-width: 0;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 13px;
+        }
+
+        .value {
+            font-size: 25px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0000000d;
+            min-width: 0;
+        }
+
+        .chart-card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        .notice {
+            background: #fff7ed;
+            color: #9a3412;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 30px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1000px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <h2>Commerce BI</h2>
+
+        <a href="{{ url_for('index') }}" class="active">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('analytics_dashboard') }}">
+            📈 Sales Analytics
+        </a>
+
+        <a href="{{ url_for('customers') }}">
+            👥 Customers
+        </a>
+
+        <a href="{{ url_for('all_orders') }}">
+            🛒 All Orders
+        </a>
+
+        <a href="{{ url_for('all_products') }}">
+            📦 All Products
+        </a>
+
+        <a href="{{ url_for('earnings') }}">
+            💰 Earnings
+        </a>
+
+        <a href="{{ url_for('report') }}">
+            📄 Reports
+        </a>
+
+        <a href="{{ url_for('message_center') }}">
+            ✉️ Message Center
+        </a>
+
+        <hr style="margin: 15px 0; border-color: #475569;">
+
+        <a href="{{ url_for('export_csv') }}">
+            ⬇️ Export Sales CSV
+        </a>
+
+        <a href="{{ url_for('export_customers') }}">
+            ⬇️ Export Customers
+        </a>
+    </aside>
+
+    <main class="main">
+
+        <header class="header">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p>Monitor your e-commerce business performance.</p>
+            </div>
+
+            <a class="btn" href="{{ url_for('report') }}">
+                View Report
+            </a>
+        </header>
+
+        <div class="notice">
+            <strong>Business Overview:</strong>
+            Your dashboard figures are calculated from your MySQL database.
+            Profit may show N/A when product costs are missing.
+        </div>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>Total Orders</h3>
+                <div class="value">
+                    {{ "{:,}".format(total_orders or 0) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Units Ordered</h3>
+                <div class="value">
+                    {{ "{:,}".format(units_ordered or 0) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <div class="value">
+                    ₹{{ "{:,.2f}".format(total_revenue or 0) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Total Profit</h3>
+                <div class="value">
+                    {% if total_profit is not none %}
+                        ₹{{ "{:,.2f}".format(total_profit) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Average Order Value</h3>
+                <div class="value">
+                    ₹{{ "{:,.2f}".format(average_order_value or 0) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Total Customers</h3>
+                <div class="value">
+                    {{ "{:,}".format(total_customers or 0) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Total Products</h3>
+                <div class="value">
+                    {{ "{:,}".format(total_products or 0) }}
+                </div>
+            </div>
+
+        </section>
+
+        <section class="charts">
+
+            <div class="chart-card">
+                <h2>Monthly Revenue</h2>
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h2>Revenue by Region</h2>
+                <div class="chart-container">
+                    <canvas id="regionalChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h2>Top Products by Revenue</h2>
+                <div class="chart-container">
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            Commerce BI Dashboard | E-Commerce Business Analytics
+        </footer>
+
+    </main>
+
+    <script>
+        // These variable names match app.py exactly.
+        const months = {{ months | tojson }};
+        const monthlyRevenue = {{ monthly_revenue | tojson }};
+
+        const regions = {{ regions | tojson }};
+        const regionalRevenue = {{ regional_revenue | tojson }};
+
+        const products = {{ products | tojson }};
+        const productRevenue = {{ product_revenue | tojson }};
+
+        // Monthly revenue chart
+        new Chart(document.getElementById("monthlyChart"), {
+            type: "line",
+            data: {
+                labels: months,
+                datasets: [{
+                    label: "Revenue (₹)",
+                    data: monthlyRevenue,
+                    borderWidth: 3,
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Regional revenue chart
+        new Chart(document.getElementById("regionalChart"), {
+            type: "bar",
+            data: {
+                labels: regions,
+                datasets: [{
+                    label: "Revenue (₹)",
+                    data: regionalRevenue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Top products chart
+        new Chart(document.getElementById("productsChart"), {
+            type: "bar",
+            data: {
+                labels: products,
+                datasets: [{
+                    label: "Revenue (₹)",
+                    data: productRevenue,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

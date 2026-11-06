@@ -1,0 +1,887 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Customer Support | Commerce BI</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #fdf2f8, #ecfeff);
+            color: #25304a;
+        }
+
+        .topbar {
+            background: linear-gradient(110deg, #4338ca, #7c3aed, #c026d3);
+            color: white;
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 8px 25px #4338ca25;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            background: #ffffff25;
+            font-size: 20px;
+        }
+
+        .top-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 9px;
+            background: #ffffff20;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .top-links a:hover {
+            background: #ffffff35;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            max-width: 1150px;
+            margin: 35px auto 25px;
+            padding: 0 22px;
+        }
+
+        .hero h1 {
+            font-size: clamp(27px, 4vw, 38px);
+            margin-bottom: 10px;
+            color: #29245f;
+        }
+
+        .hero h1 i {
+            color: #9333ea;
+            margin-right: 8px;
+        }
+
+        .hero p {
+            color: #707b93;
+            font-size: 15px;
+            line-height: 1.7;
+            max-width: 680px;
+        }
+
+        .features {
+            max-width: 1106px;
+            margin: 0 auto 25px;
+            padding: 0 22px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 17px;
+            background: #ffffffd9;
+            border: 1px solid #e9e7fb;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px #4338ca08;
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 18px;
+        }
+
+        .feature:nth-child(1) .feature-icon {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .feature:nth-child(2) .feature-icon {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .feature:nth-child(3) .feature-icon {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .feature h3 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .feature p {
+            font-size: 12px;
+            color: #8b95aa;
+            line-height: 1.5;
+        }
+
+        /* Main form layout */
+        .content {
+            max-width: 1106px;
+            margin: 0 auto;
+            padding: 0 22px 45px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.8fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .form-card,
+        .side-card {
+            background: white;
+            border: 1px solid #e8eaf4;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px #352b7010;
+        }
+
+        .form-heading {
+            padding: 24px 26px;
+            border-bottom: 1px solid #f0eff8;
+            background: linear-gradient(120deg, #faf5ff, #eff6ff);
+            border-radius: 18px 18px 0 0;
+        }
+
+        .form-heading h2 {
+            font-size: 20px;
+            margin-bottom: 7px;
+            color: #30245e;
+        }
+
+        .form-heading h2 i {
+            color: #9333ea;
+            margin-right: 8px;
+        }
+
+        .form-heading p {
+            font-size: 13px;
+            color: #7c8499;
+            line-height: 1.6;
+        }
+
+        form {
+            padding: 26px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+            min-width: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 9px;
+        }
+
+        .required {
+            color: #e11d48;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #dfe3ef;
+            border-radius: 10px;
+            outline: none;
+            background: #fbfcff;
+            color: #29344d;
+            font: inherit;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #8b5cf6;
+            background: white;
+            box-shadow: 0 0 0 3px #8b5cf618;
+        }
+
+        textarea {
+            min-height: 145px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .help-text {
+            color: #9aa2b4;
+            font-size: 11px;
+            margin-top: 7px;
+            line-height: 1.5;
+        }
+
+        .priority-options {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .priority-option {
+            position: relative;
+        }
+
+        .priority-option input {
+            position: absolute;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+        }
+
+        .priority-option label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            padding: 12px 6px;
+            margin: 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            background: #fafafa;
+            transition: 0.2s;
+        }
+
+        .priority-option.low label {
+            color: #047857;
+        }
+
+        .priority-option.medium label {
+            color: #b45309;
+        }
+
+        .priority-option.high label {
+            color: #be123c;
+        }
+
+        .priority-option.low input:checked + label {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .priority-option.medium input:checked + label {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .priority-option.high input:checked + label {
+            background: #ffe4e6;
+            border-color: #f43f5e;
+        }
+
+        .priority-option input:focus-visible + label {
+            outline: 2px solid #7c3aed;
+            outline-offset: 3px;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 5px 0 22px;
+        }
+
+        .checkbox-row input {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: #7c3aed;
+        }
+
+        .checkbox-row label {
+            font-weight: 400;
+            font-size: 12px;
+            color: #68738a;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .submit-btn,
+        .reset-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            padding: 13px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .submit-btn {
+            color: white;
+            border: none;
+            background: linear-gradient(110deg, #6d28d9, #9333ea, #c026d3);
+            box-shadow: 0 6px 15px #9333ea25;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px #9333ea35;
+        }
+
+        .reset-btn {
+            color: #5c6478;
+            border: 1px solid #dfe3ef;
+            background: white;
+        }
+
+        .reset-btn:hover {
+            background: #f5f3ff;
+        }
+
+        /* Sidebar information */
+        .side-card {
+            padding: 23px;
+            margin-bottom: 18px;
+        }
+
+        .side-card h3 {
+            font-size: 16px;
+            color: #30245e;
+            margin-bottom: 18px;
+        }
+
+        .side-card h3 i {
+            color: #8b5cf6;
+            margin-right: 7px;
+        }
+
+        .step {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            color: #7c3aed;
+            background: #ede9fe;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .step h4 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .step p {
+            font-size: 12px;
+            color: #8b95aa;
+            line-height: 1.6;
+        }
+
+        .contact-card {
+            color: white;
+            padding: 24px;
+            border-radius: 17px;
+            background: linear-gradient(140deg, #0f766e, #0891b2, #2563eb);
+            box-shadow: 0 9px 25px #0891b220;
+        }
+
+        .contact-card .big-icon {
+            font-size: 27px;
+            margin-bottom: 16px;
+        }
+
+        .contact-card h3 {
+            font-size: 17px;
+            margin-bottom: 9px;
+        }
+
+        .contact-card p {
+            color: #e0f2fe;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .flash-message {
+            padding: 13px 15px;
+            margin: 0 26px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .flash-message.success {
+            color: #047857;
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .flash-message.error,
+        .flash-message.danger {
+            color: #be123c;
+            background: #ffe4e6;
+            border: 1px solid #fecdd3;
+        }
+
+        .flash-message.warning {
+            color: #92400e;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 0 15px 25px;
+            color: #969eb1;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .topbar {
+                padding: 18px;
+            }
+
+            .hero {
+                margin-top: 26px;
+            }
+
+            .content,
+            .features {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            .form-heading {
+                padding: 20px;
+            }
+
+            .priority-options {
+                gap: 6px;
+            }
+
+            .priority-option label {
+                font-size: 11px;
+            }
+
+            .actions > button {
+                width: 100%;
+            }
+
+            .flash-message {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fa-solid fa-headset"></i>
+        </div>
+        Commerce BI Support
+    </div>
+
+    <nav class="top-links">
+        <a href="{{ url_for('index') }}">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+        <a href="{{ url_for('all_orders') }}">
+            <i class="fa-solid fa-box"></i> My Orders
+        </a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>
+        <i class="fa-solid fa-comments"></i>
+        How can we help you?
+    </h1>
+    <p>
+        Have a question, found a problem, or want to share feedback?
+        Complete the form below so your message can be sent to the support team.
+    </p>
+</section>
+
+<section class="features">
+    <div class="feature">
+        <div class="feature-icon">
+            <i class="fa-solid fa-message"></i>
+        </div>
+        <div>
+            <h3>Ask a Question</h3>
+            <p>Get help with your shopping experience.</p>
+        </div>
+    </div>
+
+    <div class="feature">
+        <div class="feature-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+            <h3>Report an Issue</h3>
+            <p>Tell us about errors, delays, or other problems.</p>
+        </div>
+    </div>
+
+    <div class="feature">
+        <div class="feature-icon">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+        <div>
+            <h3>Share Feedback</h3>
+            <p>Help us improve the service.</p>
+        </div>
+    </div>
+</section>
+
+<main class="content">
+
+    <!-- Support form -->
+    <section class="form-card">
+
+        <div class="form-heading">
+            <h2>
+                <i class="fa-solid fa-paper-plane"></i>
+                Send a Message
+            </h2>
+            <p>Fields marked with * are required.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST"
+              action="{{ url_for('message_center') }}"
+              id="supportForm">
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="name">
+                        <i class="fa-solid fa-user"></i>
+                        Your Name <span class="required">*</span>
+                    </label>
+                    <input type="text"
+                           id="name"
+                           name="name"
+                           placeholder="Enter your full name"
+                           maxlength="100"
+                           autocomplete="name"
+                           required>
+                </div>
+
+                <div class="field">
+                    <label for="email">
+                        <i class="fa-solid fa-envelope"></i>
+                        Email Address <span class="required">*</span>
+                    </label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="you@example.com"
+                           maxlength="254"
+                           autocomplete="email"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="category">
+                        <i class="fa-solid fa-layer-group"></i>
+                        Message Category <span class="required">*</span>
+                    </label>
+                    <select id="category" name="category" required>
+                        <option value="">Choose a category</option>
+                        <option value="General Question">General Question</option>
+                        <option value="Order Problem">Order Problem</option>
+                        <option value="Payment Issue">Payment Issue</option>
+                        <option value="Delivery Delay">Delivery Delay</option>
+                        <option value="Product Complaint">Product Complaint</option>
+                        <option value="Return or Refund">Return or Refund</option>
+                        <option value="Website Technical Issue">Website Technical Issue</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="order_id">
+                        <i class="fa-solid fa-receipt"></i>
+                        Order ID (Optional)
+                    </label>
+                    <input type="text"
+                           id="order_id"
+                           name="order_id"
+                           placeholder="e.g. 1001"
+                           maxlength="50">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>
+                    <i class="fa-solid fa-gauge-high"></i>
+                    Issue Priority <span class="required">*</span>
+                </label>
+
+                <div class="priority-options">
+                    <div class="priority-option low">
+                        <input type="radio"
+                               id="priority_low"
+                               name="priority"
+                               value="Low"
+                               required>
+                        <label for="priority_low">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Low
+                        </label>
+                    </div>
+
+                    <div class="priority-option medium">
+                        <input type="radio"
+                               id="priority_medium"
+                               name="priority"
+                               value="Medium">
+                        <label for="priority_medium">
+                            <i class="fa-solid fa-clock"></i>
+                            Medium
+                        </label>
+                    </div>
+
+                    <div class="priority-option high">
+                        <input type="radio"
+                               id="priority_high"
+                               name="priority"
+                               value="High">
+                        <label for="priority_high">
+                            <i class="fa-solid fa-bolt"></i>
+                            High
+                        </label>
+                    </div>
+                </div>
+
+                <p class="help-text">
+                    Choose High for an urgent problem that needs quick attention.
+                </p>
+            </div>
+
+            <div class="field">
+                <label for="subject">
+                    <i class="fa-solid fa-heading"></i>
+                    Subject <span class="required">*</span>
+                </label>
+                <input type="text"
+                       id="subject"
+                       name="subject"
+                       placeholder="Briefly describe your concern"
+                       maxlength="150"
+                       required>
+            </div>
+
+            <div class="field">
+                <label for="message">
+                    <i class="fa-solid fa-align-left"></i>
+                    Detailed Message <span class="required">*</span>
+                </label>
+                <textarea id="message"
+                          name="message"
+                          placeholder="Explain your question, complaint, or issue in detail..."
+                          minlength="10"
+                          maxlength="5000"
+                          required></textarea>
+                <p class="help-text">
+                    Please include the details needed to understand the issue.
+                    <span id="characterCount">0 / 5000 characters</span>
+                </p>
+            </div>
+
+            <div class="checkbox-row">
+                <input type="checkbox"
+                       id="confirmation"
+                       name="confirmation"
+                       value="yes"
+                       required>
+                <label for="confirmation">
+                    I confirm that the information provided is accurate and
+                    that the support team may use it to respond to my request.
+                </label>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Submit Message
+                </button>
+
+                <button type="reset" class="reset-btn">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Clear Form
+                </button>
+            </div>
+
+        </form>
+    </section>
+
+    <!-- Help sidebar -->
+    <aside>
+        <section class="side-card">
+            <h3>
+                <i class="fa-solid fa-list-check"></i>
+                What happens next?
+            </h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h4>Submit your message</h4>
+                    <p>Provide your contact details and explain the problem.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h4>Support reviews it</h4>
+                    <p>Your application can store the submitted request in its database.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h4>Follow up</h4>
+                    <p>The support team can use your contact details to respond once a reply process is configured.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-card">
+            <div class="big-icon">
+                <i class="fa-solid fa-life-ring"></i>
+            </div>
+            <h3>We're here to help!</h3>
+            <p>
+                For a faster resolution, select the correct category,
+                choose the priority, and describe the issue clearly.
+            </p>
+        </section>
+    </aside>
+
+</main>
+
+<footer class="footer">
+    © 2026 Commerce BI · Customer Support Center
+</footer>
+
+<script>
+    const messageInput = document.getElementById("message");
+    const characterCount = document.getElementById("characterCount");
+    const supportForm = document.getElementById("supportForm");
+
+    function updateCharacterCount() {
+        characterCount.textContent =
+            messageInput.value.length + " / 5000 characters";
+    }
+
+    messageInput.addEventListener("input", updateCharacterCount);
+
+    supportForm.addEventListener("reset", function() {
+        setTimeout(updateCharacterCount, 0);
+    });
+</script>
+
+</body>
+</html>
+```

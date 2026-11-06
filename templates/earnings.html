@@ -1,0 +1,687 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Earnings | Commerce BI</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6fc;
+            color: #24304a;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 245px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #4338ca, #7c3aed, #a21caf);
+            padding: 28px 18px;
+            color: white;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0 0 42px 8px;
+        }
+
+        .brand i {
+            color: #fde68a;
+            margin-right: 8px;
+        }
+
+        .menu-title {
+            color: #ddd6fe;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            margin: 20px 12px 13px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #ede9fe;
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar a i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(3px);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 29px;
+            color: #202b46;
+            margin-bottom: 8px;
+        }
+
+        .heading h1 i {
+            color: #7c3aed;
+            margin-right: 8px;
+        }
+
+        .heading p {
+            color: #8790a5;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: linear-gradient(135deg, #6d28d9, #9333ea);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px #7c3aed30;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Earnings summary cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 17px;
+            padding: 24px;
+            border: 1px solid #edf0f7;
+            box-shadow: 0 6px 24px rgba(31, 41, 85, 0.06);
+            position: relative;
+            overflow: hidden;
+            transition: 0.25s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(31, 41, 85, 0.10);
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            right: -35px;
+            top: -40px;
+            background: var(--soft);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .card-label {
+            color: #7d879c;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--soft);
+            color: var(--accent);
+            border-radius: 14px;
+            font-size: 20px;
+            z-index: 1;
+        }
+
+        .value {
+            color: #202b46;
+            font-size: 29px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .card-description {
+            color: #9aa2b4;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .revenue {
+            --accent: #7c3aed;
+            --soft: #ede9fe;
+        }
+
+        .orders {
+            --accent: #0284c7;
+            --soft: #e0f2fe;
+        }
+
+        .average {
+            --accent: #059669;
+            --soft: #d1fae5;
+        }
+
+        /* Chart panel */
+        .chart-panel {
+            background: white;
+            padding: 26px;
+            border-radius: 17px;
+            border: 1px solid #edf0f7;
+            box-shadow: 0 6px 24px rgba(31, 41, 85, 0.06);
+            margin-bottom: 25px;
+        }
+
+        .chart-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .chart-heading h2 {
+            font-size: 19px;
+            color: #202b46;
+            margin-bottom: 7px;
+        }
+
+        .chart-heading h2 i {
+            color: #7c3aed;
+            margin-right: 8px;
+        }
+
+        .chart-heading p {
+            color: #929bb0;
+            font-size: 13px;
+        }
+
+        .chart-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            background: #f3e8ff;
+            color: #7e22ce;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+        }
+
+        /* Bottom information */
+        .info-panel {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 14px;
+            background: linear-gradient(120deg, #ede9fe, #eff6ff);
+            border: 1px solid #e4ddff;
+        }
+
+        .info-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            background: white;
+            color: #7c3aed;
+            font-size: 18px;
+        }
+
+        .info-panel h3 {
+            font-size: 14px;
+            color: #4c1d95;
+            margin-bottom: 6px;
+        }
+
+        .info-panel p {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            color: #9aa2b4;
+            font-size: 12px;
+            padding: 25px 0 5px;
+        }
+
+        @media (max-width: 1000px) {
+            .sidebar {
+                width: 205px;
+            }
+
+            .main-content {
+                padding: 23px;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 17px;
+            }
+
+            .brand {
+                margin-bottom: 18px;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .sidebar nav {
+                display: flex;
+                gap: 7px;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .sidebar a {
+                flex-shrink: 0;
+                margin: 0;
+                padding: 10px 12px;
+            }
+
+            .main-content {
+                padding: 20px 14px;
+            }
+
+            .heading h1 {
+                font-size: 24px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .chart-panel {
+                padding: 18px;
+            }
+
+            .chart-container {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- Sidebar navigation -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-chart-pie"></i> Commerce BI
+        </div>
+
+        <div class="menu-title">Main Menu</div>
+
+        <nav>
+            <a href="{{ url_for('index') }}">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('analytics_dashboard') }}">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+
+            <a href="{{ url_for('customers') }}">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+
+            <a href="{{ url_for('all_orders') }}">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>All Orders</span>
+            </a>
+
+            <a href="{{ url_for('all_products') }}">
+                <i class="fa-solid fa-box-open"></i>
+                <span>Products</span>
+            </a>
+
+            <a href="{{ url_for('earnings') }}" class="active">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+                <span>Earnings</span>
+            </a>
+
+            <a href="{{ url_for('report') }}">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="{{ url_for('message_center') }}">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Message Center</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main page -->
+    <main class="main-content">
+
+        <section class="topbar">
+            <div class="heading">
+                <h1>
+                    <i class="fa-solid fa-sack-dollar"></i>
+                    Earnings Overview
+                </h1>
+                <p>Track your revenue and monitor monthly sales performance.</p>
+            </div>
+
+            <a class="back-btn" href="{{ url_for('index') }}">
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+        </section>
+
+        <!-- Summary cards -->
+        <section class="cards">
+
+            <div class="card revenue">
+                <div class="card-top">
+                    <div class="card-label">Total Revenue</div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+                </div>
+
+                <div class="value">
+                    ₹{{ "%.2f"|format(total_revenue|default(0, true)|float) }}
+                </div>
+
+                <div class="card-description">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Total net sales recorded
+                </div>
+            </div>
+
+            <div class="card orders">
+                <div class="card-top">
+                    <div class="card-label">Total Orders</div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                </div>
+
+                <div class="value">
+                    {{ total_orders|default(0, true) }}
+                </div>
+
+                <div class="card-description">
+                    <i class="fa-solid fa-database"></i>
+                    Orders in your sales data
+                </div>
+            </div>
+
+            <div class="card average">
+                <div class="card-top">
+                    <div class="card-label">Average Order Value</div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                </div>
+
+                <div class="value">
+                    ₹{{ "%.2f"|format(average_order_value|default(0, true)|float) }}
+                </div>
+
+                <div class="card-description">
+                    <i class="fa-solid fa-calculator"></i>
+                    Average revenue per order
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Monthly revenue chart -->
+        <section class="chart-panel">
+
+            <div class="chart-heading">
+                <div>
+                    <h2>
+                        <i class="fa-solid fa-chart-area"></i>
+                        Monthly Revenue
+                    </h2>
+                    <p>Explore how your revenue changes over time.</p>
+                </div>
+
+                <div class="chart-label">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Monthly Overview
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="earningsChart"></canvas>
+            </div>
+
+        </section>
+
+        <!-- Helpful information -->
+        <section class="info-panel">
+            <div class="info-icon">
+                <i class="fa-solid fa-lightbulb"></i>
+            </div>
+
+            <div>
+                <h3>Understanding your earnings</h3>
+                <p>
+                    Total Revenue represents net sales from your order data.
+                    Average Order Value is calculated as total revenue divided
+                    by total orders. The chart displays monthly revenue using
+                    the data supplied by your Flask application.
+                </p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            © 2026 Commerce BI Dashboard · E-Commerce Analytics
+        </footer>
+
+    </main>
+</div>
+
+<script>
+    const monthLabels = {{ months|tojson }};
+    const revenueValues = {{ monthly_revenue|tojson }};
+
+    const chartCanvas = document.getElementById("earningsChart");
+
+    const chartContext = chartCanvas.getContext("2d");
+
+    const gradient = chartContext.createLinearGradient(0, 0, 0, 350);
+    gradient.addColorStop(0, "rgba(124, 58, 237, 0.28)");
+    gradient.addColorStop(1, "rgba(124, 58, 237, 0.01)");
+
+    new Chart(chartCanvas, {
+        type: "line",
+
+        data: {
+            labels: monthLabels,
+
+            datasets: [{
+                label: "Revenue (₹)",
+                data: revenueValues,
+
+                borderColor: "#7c3aed",
+                backgroundColor: gradient,
+
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+
+                pointRadius: 5,
+                pointHoverRadius: 8,
+                pointBackgroundColor: "#ffffff",
+                pointBorderColor: "#7c3aed",
+                pointBorderWidth: 3
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            interaction: {
+                intersect: false,
+                mode: "index"
+            },
+
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "top",
+                    align: "end",
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 8,
+                        color: "#6b7280",
+                        padding: 20
+                    }
+                },
+
+                tooltip: {
+                    backgroundColor: "#202b46",
+                    padding: 12,
+                    displayColors: false,
+
+                    callbacks: {
+                        label: function(context) {
+                            return "Revenue: ₹" +
+                                Number(context.parsed.y).toLocaleString("en-IN", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                        }
+                    }
+                }
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: "#8790a5"
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+
+                    grid: {
+                        color: "#edf0f7"
+                    },
+
+                    ticks: {
+                        color: "#8790a5",
+
+                        callback: function(value) {
+                            return "₹" + Number(value).toLocaleString("en-IN");
+                        }
+                    },
+
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
+```

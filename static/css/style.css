@@ -1,0 +1,374 @@
+
+/* ==============================
+   1. COLOR VARIABLES
+============================== */
+
+:root {
+    --primary: #635bff;
+    --secondary: #8b5cf6;
+    --pink: #ec4899;
+    --cyan: #06b6d4;
+    --green: #10b981;
+    --orange: #f59e0b;
+
+    --background: #f5f7ff;
+    --surface: #ffffff;
+    --text: #202544;
+    --muted: #737b96;
+    --border: #e8eaf4;
+
+    --shadow: 0 10px 30px rgba(39, 45, 100, 0.08);
+}
+
+/* ==============================
+   2. GENERAL PAGE DESIGN
+============================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+h1, h2, h3 {
+    letter-spacing: -0.4px;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+/* ==============================
+   3. SIDEBAR
+============================== */
+
+.sidebar {
+    background: linear-gradient(
+        180deg,
+        #29245f,
+        #5142a8 65%,
+        #7556cf
+    );
+    color: white;
+    padding: 22px;
+}
+
+.sidebar h2,
+.sidebar h3 {
+    color: white;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 15px;
+    margin: 5px 0;
+    border-radius: 10px;
+    color: #eeedff;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    color: white;
+    background: rgba(255, 255, 255, 0.17);
+}
+
+/* ==============================
+   4. MAIN CONTENT
+============================== */
+
+.content {
+    padding: 28px;
+    min-width: 0;
+}
+
+.page-header {
+    padding: 26px;
+    margin-bottom: 24px;
+    border-radius: 18px;
+    color: white;
+    background: linear-gradient(
+        120deg,
+        #635bff,
+        #8b5cf6,
+        #ec4899
+    );
+    box-shadow: var(--shadow);
+}
+
+.page-header h1,
+.page-header p {
+    color: white;
+}
+
+/* ==============================
+   5. DASHBOARD CARDS
+============================== */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card,
+.stat-card,
+.chart-card,
+.message-card,
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover,
+.stat-card:hover,
+.chart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(39, 45, 100, 0.12);
+}
+
+.stat-card:nth-child(4n + 1) {
+    border-top: 4px solid var(--primary);
+}
+
+.stat-card:nth-child(4n + 2) {
+    border-top: 4px solid var(--pink);
+}
+
+.stat-card:nth-child(4n + 3) {
+    border-top: 4px solid var(--cyan);
+}
+
+.stat-card:nth-child(4n) {
+    border-top: 4px solid var(--green);
+}
+
+.stat-card h3 {
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.stat-card p {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+/* ==============================
+   6. CHARTS
+============================== */
+
+.chart-card {
+    margin-top: 22px;
+    min-width: 0;
+}
+
+.chart-card h2 {
+    font-size: 19px;
+    margin-top: 0;
+}
+
+.chart-card canvas {
+    max-width: 100%;
+}
+
+/* ==============================
+   7. BUTTONS
+============================== */
+
+button,
+.btn-primary {
+    display: inline-block;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 18px;
+    color: white;
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover,
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 91, 255, 0.25);
+    color: white;
+}
+
+.btn-danger {
+    background: #ef4444;
+}
+
+.btn-success {
+    background: #10b981;
+}
+
+/* ==============================
+   8. FORMS
+============================== */
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: white;
+    color: var(--text);
+    outline: none;
+    margin: 6px 0 16px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.12);
+}
+
+label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* ==============================
+   9. TABLES
+============================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+th {
+    background: #f0efff;
+    color: #4941a8;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+tr:hover td {
+    background: #fafaff;
+}
+
+/* ==============================
+   10. ALERT MESSAGES
+============================== */
+
+.flash,
+.alert {
+    padding: 13px 16px;
+    border-radius: 10px;
+    margin: 12px 0;
+    background: #ede9fe;
+    color: #5b21b6;
+}
+
+.flash.success,
+.alert.success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.flash.error,
+.alert.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ==============================
+   11. MESSAGE CENTER
+============================== */
+
+.message-card {
+    margin: 16px 0;
+    border-left: 4px solid var(--secondary);
+}
+
+.message-card h3 {
+    margin-top: 0;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* ==============================
+   12. 404 ERROR PAGE
+============================== */
+
+.error-page {
+    max-width: 650px;
+    margin: 12vh auto;
+    padding: 35px;
+    text-align: center;
+    background: white;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+}
+
+.error-page h1 {
+    font-size: 76px;
+    margin: 0;
+    color: var(--primary);
+}
+
+/* ==============================
+   13. RESPONSIVE DESIGN
+============================== */
+
+@media (max-width: 1000px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        padding: 16px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .page-header {
+        padding: 18px;
+    }
+}

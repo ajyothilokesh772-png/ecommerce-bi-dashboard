@@ -1,0 +1,186 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sales Report | E-Commerce BI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #202840;
+            background: #f5f7fb;
+        }
+
+        h1 {
+            color: #1e3a8a;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        .summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 18px;
+            min-width: 180px;
+            flex: 1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .card h2 {
+            color: #2563eb;
+            margin: 0;
+            overflow-wrap: anywhere;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        button, .back-link {
+            display: inline-block;
+            padding: 10px 16px;
+            cursor: pointer;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back-link {
+            background: #e5e7eb;
+            color: #202840;
+        }
+
+        .back-link:hover {
+            background: #d1d5db;
+        }
+
+        .insight {
+            background: white;
+            border-left: 4px solid #2563eb;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .insight h3 {
+            margin-top: 5px;
+        }
+
+        .empty-message {
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                margin: 15px;
+            }
+
+            .card {
+                min-width: 100%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                margin: 10px;
+                background: white;
+            }
+
+            .card, table, .insight {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="no-print">
+        <button type="button" onclick="window.print()">
+            Print Report
+        </button>
+
+        <!-- Corrected dashboard endpoint -->
+        <a class="back-link"
+           href="{{ url_for('analytics_dashboard') }}">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <h1>E-Commerce Sales Report</h1>
+
+    <p>
+        <strong>Generated:</strong>
+        {{ now | default("Not available", true) }}
+    </p>
+
+    <p>
+        <strong>Region:</strong>
+        {{ selected_region | default("All Regions", true) }}
+    </p>
+
+    <!-- Summary Cards -->
+   

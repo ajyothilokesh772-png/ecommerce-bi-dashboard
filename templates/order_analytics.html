@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Sales Analytics</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #202938;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+        }
+
+        a {
+            color: #2459c4;
+            text-decoration: none;
+        }
+
+        .filter, .card, .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px #0000000c;
+        }
+
+        .filter form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, button {
+            padding: 10px;
+            border: 1px solid #ccd2dc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #2459c4;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            margin-bottom: 0;
+        }
+
+        .card p {
+            color: #687386;
+            margin: 0 0 12px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 25px;
+            overflow-wrap: anywhere;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e7eaf0;
+        }
+
+        th {
+            background: #f6f8fc;
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            color: #687386;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <div>
+            <h1>Sales Analytics</h1>
+            <p>Review orders and sales for your selected dates.</p>
+        </div>
+        <a href="/">← Back to Dashboard</a>
+    </div>
+
+    <div class="filter">
+        <form method="GET" action="/analytics">
+            <div>
+                <label for="start_date">Start date</label>
+                <input
+                    type="date"
+                    id="start_date"
+                    name="start_date"
+                    value="{{ start_date }}"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="end_date">End date</label>
+                <input
+                    type="date"
+                    id="end_date"
+                    name="end_date"
+                    value="{{ end_date }}"
+                    required
+                >
+            </div>
+
+            <button type="submit">Apply Filter</button>
+        </form>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <p>Total Orders</p>
+            <h2>{{ summary.total_orders }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Units Ordered</p>
+            <h2>{{ summary.units_ordered }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Net Sales</p>
+            <h2>₹{{ "%.2f"|format(summary.net_sales) }}</h2>
+        </div>
+
+        <div class="card">
+            <p>Total Profit</p>
+            <h2>
+                {% if summary.total_profit is not none %}
+                    ₹{{ "%.2f"|format(summary.total_profit) }}
+                {% else %}
+                    Unavailable
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h2>Order Details</h2>
+
+        {% if purchases %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Buyer</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                    <th>Region</th>
+                    <th>Net Sales</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in purchases %}
+                <tr>
+                    <td>{{ item.order_id }}</td>
+                    <td>{{ item.order_date }}</td>
+                    <td>{{ item.buyer or "Not linked" }}</td>
+                    <td>{{ item.product_name or "Unknown product" }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.category or "-" }}</td>
+                    <td>{{ item.region }}</td>
+                    <td>
+                        ₹{{ "%.2f"|format(item.net_sales or 0) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+            No order items found for the selected date range.
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+</body>
+</html>
